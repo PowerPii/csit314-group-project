@@ -68,9 +68,9 @@ On a push to `main` that passes, the **deploy** job applies new migrations to th
 
 ### One-time setup for deployment
 
-1. Create a Supabase project. Run `npx supabase db push --db-url "<connection string>"` once, or let CI do it.
+1. Create a Supabase project. CI applies the migrations on the first deploy.
 2. Create a Vercel project from this repo. In its Environment Variables, set `SUPABASE_URL`, `SUPABASE_SECRET_KEY` (from Supabase > Project Settings > API keys) and `SESSION_SECRET` (`openssl rand -base64 32`).
-3. In GitHub > Settings > Secrets and variables > Actions, add `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` (from `.vercel/project.json` after `npx vercel link`) and `SUPABASE_DB_URL` (Supabase > Connect > connection string, with the password).
+3. In GitHub > Settings > Secrets and variables > Actions, add `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` (from `.vercel/project.json` after `npx vercel link`) and `SUPABASE_DB_PASSWORD` (just the database password). The project ref and pooler host are set in `ci.yml`; change them there if the Supabase project changes.
 4. Protect `main`: require a pull request and the "Lint, typecheck and test" check.
 5. Seed the live database before the demo: `npm run seed -- --live` with the live values in `.env.local`.
 
