@@ -72,6 +72,6 @@ On a push to `main` that passes, the **deploy** job applies new migrations to th
 2. Create a Vercel project from this repo. In its Environment Variables, set `SUPABASE_URL`, `SUPABASE_SECRET_KEY` (from Supabase > Project Settings > API keys) and `SESSION_SECRET` (`openssl rand -base64 32`).
 3. In GitHub > Settings > Secrets and variables > Actions, add `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` (from `.vercel/project.json` after `npx vercel link`) and `SUPABASE_ACCESS_TOKEN` (Supabase > Account > Access Tokens). No database password is needed. The project ref is set in `ci.yml`; change it there if the Supabase project changes.
 4. Protect `main`: require a pull request and the "Lint, typecheck and test" check.
-5. Seed the live database before the demo: `npm run seed -- --live` with the live values in `.env.local`.
+5. Add `SUPABASE_URL` and `SUPABASE_SECRET_KEY` as GitHub secrets too. Seed the live database before the demo with Actions > **Seed live database** > Run workflow (type `wipe` to confirm), or locally with `npm run seed -- --live` and the live values in `.env.local`.
 
 Free Supabase projects pause after a week without activity. Open the dashboard before the demo.
