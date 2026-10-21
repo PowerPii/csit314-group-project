@@ -10,11 +10,14 @@ export type SessionData = {
 };
 
 export async function getSession() {
+  // Read cookies first: it marks the page as per-request, so `next build` never
+  // prerenders it and the secret is only needed at runtime.
+  const cookieStore = await cookies();
   const password = process.env.SESSION_SECRET;
   if (!password || password.length < 32) {
     throw new Error("SESSION_SECRET must be set to at least 32 characters");
   }
-  return getIronSession<SessionData>(await cookies(), {
+  return getIronSession<SessionData>(cookieStore, {
     password,
     cookieName: "renovation_session",
   });

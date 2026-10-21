@@ -39,8 +39,6 @@ jobs:
 
       - name: Build
         run: npm run build
-        env:
-          SESSION_SECRET: build-only-placeholder-secret-of-32-chars
 
   deploy:
     name: Deploy to production
