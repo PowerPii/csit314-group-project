@@ -63,6 +63,10 @@ jobs:
 
       - run: npm ci
 
+      - name: Check the SUPABASE_DB_URL secret
+        if: env.SUPABASE_DB_URL != ''
+        run: node scripts/check-db-url.mjs
+
       - name: Apply database migrations to the live Supabase project
         if: env.SUPABASE_DB_URL != ''
         run: npx supabase db push --db-url "$SUPABASE_DB_URL"
