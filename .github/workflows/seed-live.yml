@@ -1,0 +1,31 @@
+name: Seed live database
+
+# Manual button: Actions > "Seed live database" > Run workflow.
+# Wipes the live data and loads the demo data (100+ records per type).
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "wipe" to confirm all live data will be replaced'
+        required: true
+
+jobs:
+  seed:
+    name: Seed live database
+    if: inputs.confirm == 'wipe'
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run seed -- --live
