@@ -1,0 +1,79 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Lint, typecheck and test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+
+      - name: Unit tests (controllers)
+        run: npm run test:coverage
+
+      - name: Start local Supabase (applies migrations)
+        run: npx supabase start -x realtime,studio,storage-api,imgproxy,mailpit,edge-runtime,logflare,vector,supavisor,postgres-meta
+
+      - name: Integration tests (entities against the local database)
+        run: npm run test:integration
+
+      - name: Seed script runs cleanly
+        run: npm run seed
+
+      - name: Build
+        run: npm run build
+        env:
+          SESSION_SECRET: build-only-placeholder-secret-of-32-chars
+
+  deploy:
+    name: Deploy to production
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Apply database migrations to the live Supabase project
+        if: env.SUPABASE_DB_URL != ''
+        run: npx supabase db push --db-url "$SUPABASE_DB_URL"
+
+      - name: Build and deploy to Vercel
+        if: env.VERCEL_TOKEN != ''
+        run: |
+          npx vercel@65.0.0 pull --yes --environment=production --token="$VERCEL_TOKEN"
+          npx vercel@65.0.0 build --prod --token="$VERCEL_TOKEN"
+          npx vercel@65.0.0 deploy --prebuilt --prod --token="$VERCEL_TOKEN"
+
+      - name: Deployment not configured yet
+        if: env.VERCEL_TOKEN == ''
+        run: echo "::warning::Add the VERCEL_TOKEN, VERCEL_ORG_ID and VERCEL_PROJECT_ID secrets to enable deployment (see README)."
