@@ -15,7 +15,7 @@ export default async function UpdateCompanyProfileBoundary() {
   return (
     <>
       <ActorHeader title="Edit company profile" name={session.name} nav={DESIGNER_NAV} />
-      <main className="p-6">
+      <main className="p-6 sm:p-10">
         <CompanyProfileForm
           action={updateCompanyProfileAction}
           submitLabel="Save changes"

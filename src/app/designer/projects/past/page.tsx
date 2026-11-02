@@ -42,7 +42,7 @@ export default async function ViewPastProjectsBoundary({ searchParams }: PagePro
   return (
     <>
       <ActorHeader title="Past projects" name={session.name} nav={DESIGNER_NAV} />
-      <main className="p-6">
+      <main className="p-6 sm:p-10">
         <form className="mb-6 flex flex-wrap items-end gap-3">
           <label className="flex flex-col gap-1 text-sm">
             Title

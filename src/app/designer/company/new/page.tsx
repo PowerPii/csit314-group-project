@@ -11,7 +11,7 @@ export default async function CreateCompanyProfileBoundary() {
   return (
     <>
       <ActorHeader title="Create company profile" name={session.name} nav={DESIGNER_NAV} />
-      <main className="p-6">
+      <main className="p-6 sm:p-10">
         <p className="mb-4 text-sm">You can add accreditation, awards, property types, service areas and social links afterwards with Edit profile.</p>
         <CompanyProfileForm action={createCompanyProfileAction} submitLabel="Create profile" showExtraFields={false} />
       </main>

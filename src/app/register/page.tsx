@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useActionState } from "react";
+import { AuthFrame, ArrowIcon } from "../shell/AuthFrame";
 import { ui } from "../ui";
 import { registerAction, type RegisterFormState } from "./actions";
 
@@ -11,33 +11,38 @@ export default function RegisterBoundary() {
   const v = state.values;
 
   return (
-    <main className="mx-auto mt-16 w-full max-w-sm px-4">
-      <h1 className="mb-6 text-2xl font-semibold">Create a customer account</h1>
-      <form action={formAction} className="flex flex-col gap-4">
-        <label className="flex flex-col gap-1">
+    <AuthFrame
+      mode="register"
+      title="Create your account."
+      intro="Join as a customer to browse interior projects, save favourites and find the right designer."
+    >
+      <form action={formAction} className="flex flex-col gap-5">
+        <label className="flex flex-col gap-2">
           Name
-          <input name="name" required defaultValue={v?.name} className={ui.input} />
+          <input name="name" required defaultValue={v?.name} className={`${ui.input} h-12`} />
         </label>
-        <label className="flex flex-col gap-1">
+        <label className="flex flex-col gap-2">
           Email
-          <input name="email" type="email" required defaultValue={v?.email} className={ui.input} />
+          <input name="email" type="email" required defaultValue={v?.email} className={`${ui.input} h-12`} />
         </label>
-        <label className="flex flex-col gap-1">
+        <label className="flex flex-col gap-2">
           Phone (optional)
-          <input name="phone" defaultValue={v?.phone} className={ui.input} />
+          <input name="phone" defaultValue={v?.phone} className={`${ui.input} h-12`} />
         </label>
-        <label className="flex flex-col gap-1">
+        <label className="flex flex-col gap-2">
           Password (at least 8 characters)
-          <input name="password" type="password" required minLength={8} className={ui.input} />
+          <input name="password" type="password" required minLength={8} className={`${ui.input} h-12`} />
         </label>
-        <label className="flex flex-col gap-1">
+        <label className="flex flex-col gap-2">
           Confirm password
-          <input name="confirmPassword" type="password" required className={ui.input} />
+          <input name="confirmPassword" type="password" required className={`${ui.input} h-12`} />
         </label>
         {state.error && <p role="alert" className={ui.error}>{state.error}</p>}
-        <button type="submit" disabled={pending} className={ui.button}>{pending ? "Creating account…" : "Register"}</button>
+        <button type="submit" disabled={pending} className={`${ui.button} h-12`}>
+          {pending ? "Creating account…" : "Register"}
+          {!pending && <ArrowIcon />}
+        </button>
       </form>
-      <p className="mt-4 text-sm">Already have an account? <Link href="/login" className={ui.link}>Log in</Link></p>
-    </main>
+    </AuthFrame>
   );
 }

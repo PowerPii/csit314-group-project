@@ -14,12 +14,12 @@ export default async function ViewCompanyProfileBoundary() {
   return (
     <>
       <ActorHeader title="My company profile" name={session.name} nav={DESIGNER_NAV} />
-      <main className="p-6">
+      <main className="p-6 sm:p-10">
         {profile ? (
           <>
             <p className="mb-4 text-sm">This is how customers see your company profile.</p>
             <CompanyProfileCard profile={profile} />
-            <Link href="/designer/company/edit" className={`${ui.button} mt-4 inline-block`}>Edit profile</Link>
+            <Link href="/designer/company/edit" className={`${ui.button} mt-6`}>Edit profile</Link>
           </>
         ) : (
           <>

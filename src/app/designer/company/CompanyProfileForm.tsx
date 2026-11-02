@@ -39,7 +39,7 @@ export function CompanyProfileForm({
       {fields.map((f) => (
         <label key={f.name} className="flex flex-col gap-1">
           {f.label}
-          {f.hint && <span className="text-xs text-gray-500">{f.hint}</span>}
+          {f.hint && <span className="text-xs text-muted">{f.hint}</span>}
           {f.multiline ? (
             <textarea name={f.name} rows={3} defaultValue={values?.[f.name]} className={ui.input} />
           ) : (

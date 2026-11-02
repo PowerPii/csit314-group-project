@@ -20,7 +20,7 @@ export default async function WeeklyReportBoundary({ searchParams }: PageProps<"
   return (
     <>
       <ActorHeader title="Weekly report" name={session.name} nav={MANAGER_NAV} />
-      <main className="flex flex-col gap-6 p-6">
+      <main className="flex flex-col gap-6 p-6 sm:p-10">
         <PeriodForm>
           <label className="flex flex-col gap-1 text-sm">
             Any day in the week
@@ -31,7 +31,7 @@ export default async function WeeklyReportBoundary({ searchParams }: PageProps<"
           <p role="alert" className={ui.error}>{result.error}</p>
         ) : (
           <>
-            <h2 className="text-lg font-semibold">
+            <h2 className="font-serif text-xl tracking-tight">
               Week of {sgDateString(result.report.from)} to {lastDay} (Monday to Sunday)
             </h2>
             <StatGrid

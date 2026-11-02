@@ -20,7 +20,7 @@ export default async function UpdateUserAccountBoundary({ params }: PageProps<"/
   return (
     <>
       <ActorHeader title={`Edit account: ${account.email}`} name={session.name} nav={USER_ADMIN_NAV} />
-      <main className="p-6">
+      <main className="p-6 sm:p-10">
         <UpdateUserAccountForm
           action={updateUserAccountAction.bind(null, id)}
           account={{ name: account.name, email: account.email, phone: account.phone ?? "", roleId: account.roleId }}

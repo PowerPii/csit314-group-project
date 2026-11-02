@@ -20,7 +20,7 @@ export default async function ViewCategoriesBoundary({ searchParams }: PageProps
   return (
     <>
       <ActorHeader title="Categories" name={session.name} nav={MANAGER_NAV} />
-      <main className="p-6">
+      <main className="p-6 sm:p-10">
         <div className="flex flex-wrap items-start gap-4">
           <SearchBox name="q" value={query} placeholder="Search name or description" clearHref="/platform-manager/categories" />
           <Link href="/platform-manager/categories/new" className={ui.button}>New category</Link>

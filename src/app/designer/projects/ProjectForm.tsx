@@ -60,7 +60,7 @@ export function ProjectForm({
       </label>
       <label className="flex flex-col gap-1">
         Design style tags
-        <span className="text-xs text-gray-500">Separate with commas, e.g. Modern, Japandi</span>
+        <span className="text-xs text-muted">Separate with commas, e.g. Modern, Japandi</span>
         <input name="styleTags" defaultValue={v?.styleTags} className={ui.input} />
       </label>
       <div className="flex gap-4">

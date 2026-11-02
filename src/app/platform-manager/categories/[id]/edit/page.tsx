@@ -16,7 +16,7 @@ export default async function UpdateCategoryBoundary({ params }: PageProps<"/pla
   return (
     <>
       <ActorHeader title={`Edit category: ${category.name}`} name={session.name} nav={MANAGER_NAV} />
-      <main className="p-6">
+      <main className="p-6 sm:p-10">
         <CategoryForm
           action={updateCategoryAction.bind(null, id)}
           initial={{ name: category.name, description: category.description }}

@@ -16,7 +16,7 @@ export default async function UpdateRoleBoundary({ params }: PageProps<"/user-ad
   return (
     <>
       <ActorHeader title={`Edit role: ${role.name}`} name={session.name} nav={USER_ADMIN_NAV} />
-      <main className="p-6">
+      <main className="p-6 sm:p-10">
         <UpdateRoleForm action={updateRoleAction.bind(null, id)} role={{ name: role.name, description: role.description }} />
       </main>
     </>

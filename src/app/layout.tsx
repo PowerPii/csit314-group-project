@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Renovation Platform",
-  description: "Match renovation customers to interior designers",
+  title: "Hausfolk",
+  description: "A curated interior design network for discovering spaces and connecting with designers.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -23,7 +23,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full bg-canvas text-ink">{children}</body>
     </html>
   );
 }

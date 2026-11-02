@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { requireRole } from "@/lib/session";
 import { ActorHeader } from "../ActorHeader";
+import { ActorHome } from "../shell/ActorHome";
 import { MANAGER_NAV } from "./nav";
 
 export default async function PlatformManagerHomeBoundary() {
@@ -8,14 +8,8 @@ export default async function PlatformManagerHomeBoundary() {
 
   return (
     <>
-      <ActorHeader title="Platform Manager" name={session.name} nav={MANAGER_NAV} />
-      <main className="p-6">
-        <ul className="list-disc pl-6">
-          {MANAGER_NAV.slice(1).map((item) => (
-            <li key={item.href}><Link href={item.href} className="underline">{item.label}</Link></li>
-          ))}
-        </ul>
-      </main>
+      <ActorHeader title="Overview" name={session.name} nav={MANAGER_NAV} />
+      <ActorHome eyebrow="Platform pulse" name={session.name} nav={MANAGER_NAV.slice(1)} />
     </>
   );
 }

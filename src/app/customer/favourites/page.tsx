@@ -32,8 +32,8 @@ export default async function ViewFavouritesBoundary({ searchParams }: PageProps
   return (
     <>
       <ActorHeader title="My favourites" name={session.name} nav={CUSTOMER_NAV} />
-      <main className="flex flex-col gap-4 p-6">
-        <form className="flex flex-wrap items-end gap-3 text-sm">
+      <main className="flex flex-col gap-4 p-6 sm:p-10">
+        <form className="flex flex-wrap items-end gap-3 rounded-2xl border bg-white p-4">
           <label className="flex flex-col gap-1">
             Title
             <input name="title" defaultValue={title} className={ui.input} />

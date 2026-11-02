@@ -6,10 +6,10 @@ export function StatGrid({ stats }: { stats: { label: string; value: number; pre
   return (
     <dl className="grid grid-cols-2 gap-4 sm:grid-cols-4">
       {stats.map((s) => (
-        <div key={s.label} className="rounded border p-4">
-          <dt className="text-sm">{s.label}</dt>
-          <dd className="text-3xl font-semibold">{s.value}</dd>
-          {s.previous !== undefined && <dd className="text-xs text-gray-500">{change(s.value, s.previous)}</dd>}
+        <div key={s.label} className="rounded-2xl border bg-white p-5">
+          <dt className="text-sm text-muted">{s.label}</dt>
+          <dd className="mt-3 font-serif text-3xl">{s.value}</dd>
+          {s.previous !== undefined && <dd className="text-xs text-muted">{change(s.value, s.previous)}</dd>}
         </div>
       ))}
     </dl>
@@ -25,7 +25,7 @@ function change(value: number, previous: number): string {
 export function TopTable({ title, unit, rows }: { title: string; unit: string; rows: { key: number; name: string; count: number }[] }) {
   return (
     <section>
-      <h2 className="mb-2 font-semibold">{title}</h2>
+      <h2 className="mb-3 font-serif text-xl tracking-tight">{title}</h2>
       {rows.length === 0 ? (
         <p className="text-sm">No activity.</p>
       ) : (
@@ -54,7 +54,7 @@ export function TopTable({ title, unit, rows }: { title: string; unit: string; r
 
 export function PeriodForm({ children }: { children: ReactNode }) {
   return (
-    <form className="flex flex-wrap items-end gap-3">
+    <form className="flex flex-wrap items-end gap-3 rounded-2xl border bg-white p-4">
       {children}
       <button type="submit" className={ui.button}>Generate</button>
     </form>
