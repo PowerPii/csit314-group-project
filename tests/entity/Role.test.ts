@@ -17,3 +17,20 @@ describe("Role (local Supabase)", () => {
     expect(await Role.findByName("No such role")).toBeNull();
   });
 });
+
+describe("Role find, search, update and suspend (local Supabase)", () => {
+  it("updates and suspends a role", async () => {
+    const stamp = Date.now();
+    const role = await Role.create(`Search me ${stamp}`, "before");
+
+    expect((await Role.searchByName(`me ${stamp}`)).map((r) => r.id)).toEqual([role.id]);
+    expect((await Role.findAll()).some((r) => r.id === role.id)).toBe(true);
+
+    await role.update(`Updated ${stamp}`, "after");
+    await role.setSuspended(true);
+
+    expect(await Role.findById(role.id)).toEqual(
+      expect.objectContaining({ name: `Updated ${stamp}`, description: "after", isSuspended: true }),
+    );
+  });
+});
