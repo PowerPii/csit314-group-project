@@ -7,8 +7,8 @@ import { ActorHeader } from "../../ActorHeader";
 import { ui } from "../../ui";
 import { CUSTOMER_NAV } from "../nav";
 import { ProjectCard, ProjectGrid } from "../ProjectCard";
+import { FilterForm } from "./FilterForm";
 
-const STYLES = ["Modern", "Scandinavian", "Industrial", "Minimalist", "Japandi", "Contemporary", "Classic", "Rustic", "Tropical", "Luxury"];
 const PAGE_SIZE = 40;
 const param = (v: string | string[] | undefined) => (typeof v === "string" ? v.trim() : "");
 
@@ -25,7 +25,16 @@ export default async function BrowseProjectsBoundary({ searchParams }: PageProps
   const shown = Math.max(PAGE_SIZE, Number(param(sp.show)) || PAGE_SIZE);
 
   const filterController = new FilterProjectsController();
-  const options = await filterController.getFilterOptions();
+  const filter = {
+    categoryId: categoryId ? Number(categoryId) : null,
+    style: style || undefined,
+    designerId: designerId ? Number(designerId) : null,
+    maxBudget: maxBudget ? Number(maxBudget) : null,
+  };
+  // With a keyword search the filters are not applied, so offer every option.
+  const options = await filterController.getFilterOptions(
+    "q" in sp ? {} : { ...filter, maxBudget: filter.maxBudget && filter.maxBudget > 0 ? filter.maxBudget : null },
+  );
   let projects: Project[] = [];
   let error: string | undefined;
   if ("q" in sp) {
@@ -33,12 +42,7 @@ export default async function BrowseProjectsBoundary({ searchParams }: PageProps
     if (result.ok) projects = result.projects;
     else error = result.error;
   } else {
-    const result = await filterController.filterProjects({
-      categoryId: categoryId ? Number(categoryId) : null,
-      style: style || undefined,
-      designerId: designerId ? Number(designerId) : null,
-      maxBudget: maxBudget ? Number(maxBudget) : null,
-    });
+    const result = await filterController.filterProjects(filter);
     if (result.ok) projects = result.projects;
     else error = result.error;
   }
@@ -55,7 +59,7 @@ export default async function BrowseProjectsBoundary({ searchParams }: PageProps
           <input name="q" defaultValue={q} placeholder="Search by keyword, e.g. kitchen" className={`${ui.input} w-80`} />
           <button type="submit" className={ui.button}>Search</button>
         </form>
-        <form className="flex flex-wrap items-end gap-3 rounded-2xl border bg-white p-4">
+        <FilterForm>
           <label className="flex flex-col gap-1">
             Category
             <select name="categoryId" defaultValue={categoryId} className={ui.input}>
@@ -67,7 +71,7 @@ export default async function BrowseProjectsBoundary({ searchParams }: PageProps
             Design style
             <select name="style" defaultValue={style} className={ui.input}>
               <option value="">Any</option>
-              {STYLES.map((s) => <option key={s} value={s}>{s}</option>)}
+              {options.styles.map((s) => <option key={s} value={s}>{s}</option>)}
             </select>
           </label>
           <label className="flex flex-col gap-1">
@@ -83,7 +87,7 @@ export default async function BrowseProjectsBoundary({ searchParams }: PageProps
           </label>
           <button type="submit" className={ui.button}>Filter</button>
           {(filtering || "q" in sp) && <Link href="/customer/projects" className={ui.link}>Clear</Link>}
-        </form>
+        </FilterForm>
 
         {error ? (
           <p role="alert" className={ui.error}>{error}</p>

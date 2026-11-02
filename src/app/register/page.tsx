@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { AuthFrame, ArrowIcon } from "../shell/AuthFrame";
+import { PasswordInput } from "../shell/PasswordInput";
 import { ui } from "../ui";
 import { registerAction, type RegisterFormState } from "./actions";
 
@@ -31,11 +32,11 @@ export default function RegisterBoundary() {
         </label>
         <label className="flex flex-col gap-2">
           Password (at least 8 characters)
-          <input name="password" type="password" required minLength={8} className={`${ui.input} h-12`} />
+          <PasswordInput name="password" required minLength={8} className={`${ui.input} h-12`} />
         </label>
         <label className="flex flex-col gap-2">
           Confirm password
-          <input name="confirmPassword" type="password" required className={`${ui.input} h-12`} />
+          <PasswordInput name="confirmPassword" required className={`${ui.input} h-12`} />
         </label>
         {state.error && <p role="alert" className={ui.error}>{state.error}</p>}
         <button type="submit" disabled={pending} className={`${ui.button} h-12`}>
