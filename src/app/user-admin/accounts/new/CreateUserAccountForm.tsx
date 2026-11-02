@@ -12,8 +12,9 @@ export function CreateUserAccountForm({ roles }: { roles: { id: number; name: st
   const v = state.values;
 
   return (
-    // key resets the inputs after a successful create.
-    <form key={state.created} action={formAction} className="flex max-w-md flex-col gap-4">
+    // A new key after each reply remounts the form: it clears after a create and
+    // the role drop-down shows the value sent back after an error.
+    <form key={JSON.stringify(state)} action={formAction} className="flex max-w-md flex-col gap-4">
       <label className="flex flex-col gap-1">
         Name
         <input name="name" required defaultValue={v?.name} className={ui.input} />
