@@ -20,3 +20,25 @@ export async function countPerProject(table: "favourite" | "project_view", proje
   }
   return counts;
 }
+
+// Rows of `table` whose `column` timestamp is in [from, to).
+export async function countBetween(table: "favourite" | "project_view", column: string, from: Date, to: Date): Promise<number> {
+  const { count, error } = await getDb()
+    .from(table)
+    .select("id", { count: "exact", head: true })
+    .gte(column, from.toISOString())
+    .lt(column, to.toISOString());
+  if (error) throw new Error(`Counting ${table} failed: ${error.message}`);
+  return count ?? 0;
+}
+
+// Calls one of the "top N" report functions (see the report_functions migration).
+export async function topRows<T>(fn: string, from: Date, to: Date, limit: number): Promise<T[]> {
+  const { data, error } = await getDb().rpc(fn, {
+    from_ts: from.toISOString(),
+    to_ts: to.toISOString(),
+    max_rows: limit,
+  });
+  if (error) throw new Error(`${fn} failed: ${error.message}`);
+  return data as T[];
+}
