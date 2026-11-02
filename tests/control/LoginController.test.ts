@@ -1,12 +1,13 @@
 import { describe, expect, it, vi } from "vitest";
 import { LoginController } from "@/control/LoginController";
 import { UserAccount } from "@/entity/UserAccount";
+import { makeAccount } from "../support/factories";
 
 function account(overrides: { isSuspended?: boolean; isRoleSuspended?: boolean; passwordOk?: boolean } = {}) {
-  const acc = new UserAccount(
-    7, "Alex", "alex@example.com", null, "Customer",
-    overrides.isSuspended ?? false, overrides.isRoleSuspended ?? false, "hash",
-  );
+  const acc = makeAccount({
+    isSuspended: overrides.isSuspended ?? false,
+    isRoleSuspended: overrides.isRoleSuspended ?? false,
+  });
   vi.spyOn(acc, "verifyPassword").mockResolvedValue(overrides.passwordOk ?? true);
   return acc;
 }
