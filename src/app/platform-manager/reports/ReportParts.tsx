@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import type { Project } from "@/entity/Project";
+import { shortDate } from "../../format";
 import { ui } from "../../ui";
 
 // Pieces shared by the three report pages.
@@ -58,5 +60,56 @@ export function PeriodForm({ children }: { children: ReactNode }) {
       {children}
       <button type="submit" className={ui.button}>Generate</button>
     </form>
+  );
+}
+
+// PM #8: projects nobody opened that day. Grouped by category with a count each, so a long
+// list stays readable; each group opens to show its projects.
+export function NoViewsList({ projects }: { projects: Project[] }) {
+  const groups = new Map<string, Project[]>();
+  for (const p of projects) {
+    const key = p.categoryName ?? "Uncategorised";
+    groups.set(key, [...(groups.get(key) ?? []), p]);
+  }
+  const sorted = [...groups.entries()].sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0]));
+
+  return (
+    <section className="rounded-2xl border bg-white">
+      <div className="flex flex-wrap items-end justify-between gap-2 border-b border-line-soft px-6 py-5">
+        <div>
+          <h2 className="font-serif text-xl tracking-tight">Projects with no views ({projects.length})</h2>
+          <p className="mt-1 text-sm text-muted">
+            {projects.length === 0
+              ? "Every project was viewed at least once."
+              : `Across ${sorted.length} categories. Open a category to see its projects.`}
+          </p>
+        </div>
+      </div>
+      {sorted.length > 0 && (
+        <div className="max-h-[32rem] divide-y divide-line-soft overflow-y-auto">
+          {sorted.map(([category, list]) => (
+            <details key={category} className="group">
+              <summary className="flex list-none items-center justify-between gap-4 px-6 py-3 text-sm hover:bg-panel [&::-webkit-details-marker]:hidden">
+                <span className="flex items-center gap-2">
+                  <svg viewBox="0 0 20 20" aria-hidden="true" className="size-4 fill-none stroke-current text-muted transition group-open:rotate-90">
+                    <path d="m8 5 5 5-5 5" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  {category}
+                </span>
+                <span className={ui.mutedPill}>{list.length}</span>
+              </summary>
+              <ul className="bg-panel/60 px-6 pb-3 pl-12 text-sm">
+                {list.map((p) => (
+                  <li key={p.id} className="flex justify-between gap-4 py-1.5">
+                    <span>{p.title}</span>
+                    <span className="shrink-0 text-xs text-faint">Added {shortDate(p.createdAt)}</span>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          ))}
+        </div>
+      )}
+    </section>
   );
 }

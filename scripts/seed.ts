@@ -106,11 +106,14 @@ async function main() {
   );
 
   const styles = ["Modern", "Scandinavian", "Industrial", "Minimalist", "Japandi", "Contemporary", "Classic", "Rustic", "Tropical", "Luxury"];
-  const rooms = ["Living Room", "Kitchen", "Bedroom", "Bathroom", "Study", "Dining Room", "Balcony", "Office", "Retail", "Whole Home"];
+  // Categories are the kind of space (home type + room), kept separate from design styles,
+  // which are the projects' style tags. 10 x 10 = 100 categories.
+  const homes = ["HDB 3-Room", "HDB 4-Room", "HDB 5-Room", "HDB Executive", "Condo", "Executive Condo", "Landed", "Penthouse", "Studio Apartment", "Shophouse"];
+  const rooms = ["Living Room", "Kitchen", "Bedroom", "Bathroom", "Study", "Dining Room", "Balcony", "Home Office", "Walk-in Wardrobe", "Whole Home"];
   const categories = await insert(
     db,
     "category",
-    styles.flatMap((s) => rooms.map((r) => ({ name: `${s} ${r}`, description: `${s} design for a ${r.toLowerCase()}` }))),
+    homes.flatMap((h) => rooms.map((r) => ({ name: `${h} ${r}`, description: `${r} renovation in a ${h} home` }))),
   );
 
   const projects = await insert(

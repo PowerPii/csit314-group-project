@@ -4,7 +4,7 @@ import { requireRole } from "@/lib/session";
 import { ActorHeader } from "../../../ActorHeader";
 import { ui } from "../../../ui";
 import { MANAGER_NAV } from "../../nav";
-import { PeriodForm, StatGrid } from "../ReportParts";
+import { NoViewsList, PeriodForm, StatGrid } from "../ReportParts";
 
 // DailyReportBoundary (PM #8)
 export default async function DailyReportBoundary({ searchParams }: PageProps<"/platform-manager/reports/daily">) {
@@ -39,12 +39,7 @@ export default async function DailyReportBoundary({ searchParams }: PageProps<"/
                 { label: "Shortlists (saves)", value: result.report.shortlists },
               ]}
             />
-            <section>
-              <h2 className="mb-3 font-serif text-xl tracking-tight">Projects with no views ({result.report.projectsWithNoViews.length})</h2>
-              <ul className="columns-1 text-sm sm:columns-2 lg:columns-3">
-                {result.report.projectsWithNoViews.map((p) => <li key={p.id}>{p.title}</li>)}
-              </ul>
-            </section>
+            <NoViewsList projects={result.report.projectsWithNoViews} />
           </>
         )}
       </main>

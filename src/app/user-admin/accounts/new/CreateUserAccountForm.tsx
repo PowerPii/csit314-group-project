@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { PasswordInput } from "../../../shell/PasswordInput";
 import { ui } from "../../../ui";
 import { createUserAccountAction, type CreateUserAccountFormState } from "./actions";
 
@@ -29,7 +30,7 @@ export function CreateUserAccountForm({ roles }: { roles: { id: number; name: st
       </label>
       <label className="flex flex-col gap-1">
         Password (at least 8 characters)
-        <input name="password" type="password" required minLength={8} className={ui.input} />
+        <PasswordInput name="password" required minLength={8} autoComplete="new-password" className={ui.input} />
       </label>
       <label className="flex flex-col gap-1">
         Role

@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { AuthFrame, ArrowIcon } from "../shell/AuthFrame";
+import { PasswordInput } from "../shell/PasswordInput";
 import { ui } from "../ui";
 import { loginAction, type LoginFormState } from "./actions";
 
@@ -33,9 +34,8 @@ export default function LoginBoundary() {
         </label>
         <label className="block">
           <span className="mb-2 block">Password</span>
-          <input
+          <PasswordInput
             name="password"
-            type="password"
             required
             autoComplete="current-password"
             className={`${ui.input} h-12 w-full`}

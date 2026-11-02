@@ -68,3 +68,14 @@
     cursor: pointer;
   }
 }
+
+/* Drop-downs: our own chevron, inset from the rounded edge (the browser's arrow sat
+   on the border). Unlayered so it wins over the px-4 padding utility. */
+select {
+  appearance: none;
+  padding-right: 2.75rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23727b76' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 8 5 5 5-5'/%3E%3C/svg%3E");
+  background-position: right 1rem center;
+  background-repeat: no-repeat;
+  background-size: 1rem;
+}
