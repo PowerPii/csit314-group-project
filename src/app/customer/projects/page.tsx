@@ -50,12 +50,12 @@ export default async function BrowseProjectsBoundary({ searchParams }: PageProps
   return (
     <>
       <ActorHeader title="Browse projects" name={session.name} nav={CUSTOMER_NAV} />
-      <main className="flex flex-col gap-4 p-6">
+      <main className="flex flex-col gap-4 p-6 sm:p-10">
         <form className="flex flex-wrap items-center gap-2">
           <input name="q" defaultValue={q} placeholder="Search by keyword, e.g. kitchen" className={`${ui.input} w-80`} />
           <button type="submit" className={ui.button}>Search</button>
         </form>
-        <form className="flex flex-wrap items-end gap-3 text-sm">
+        <form className="flex flex-wrap items-end gap-3 rounded-2xl border bg-white p-4">
           <label className="flex flex-col gap-1">
             Category
             <select name="categoryId" defaultValue={categoryId} className={ui.input}>

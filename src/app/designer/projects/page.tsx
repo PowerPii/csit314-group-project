@@ -15,7 +15,7 @@ export default async function ViewCurrentProjectsBoundary() {
   return (
     <>
       <ActorHeader title="Current projects" name={session.name} nav={DESIGNER_NAV} />
-      <main className="p-6">
+      <main className="p-6 sm:p-10">
         <div className="mb-4 flex items-center gap-4">
           <Link href="/designer/projects/new" className={ui.button}>New project</Link>
           <span className="text-sm">{projects.length} current project(s)</span>

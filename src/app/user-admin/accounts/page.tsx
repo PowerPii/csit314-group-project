@@ -22,7 +22,7 @@ export default async function ViewUserAccountsBoundary({ searchParams }: PagePro
   return (
     <>
       <ActorHeader title="User accounts" name={session.name} nav={USER_ADMIN_NAV} />
-      <main className="p-6">
+      <main className="p-6 sm:p-10">
         <SearchBox name="email" value={query} placeholder="Search by email" clearHref="/user-admin/accounts" />
         <p className="mb-2 text-sm">
           {query ? `${accounts.length} account(s) match "${query}".` : `${accounts.length} accounts.`}
@@ -48,7 +48,7 @@ export default async function ViewUserAccountsBoundary({ searchParams }: PagePro
                   <td className={ui.td}>{a.email}</td>
                   <td className={ui.td}>{a.phone ?? ""}</td>
                   <td className={ui.td}>{a.roleName}</td>
-                  <td className={ui.td}>{a.isSuspended ? "Suspended" : "Active"}</td>
+                  <td className={ui.td}><span className={a.isSuspended ? ui.mutedPill : ui.pill}>{a.isSuspended ? "Suspended" : "Active"}</span></td>
                   <td className={ui.td}>
                     <div className="flex flex-wrap items-start gap-2">
                     <Link href={`/user-admin/accounts/${a.id}/edit`} className={ui.smallButton}>Edit</Link>

@@ -10,7 +10,7 @@ export default async function CreateRoleBoundary() {
   return (
     <>
       <ActorHeader title="Create role" name={session.name} nav={USER_ADMIN_NAV} />
-      <main className="p-6">
+      <main className="p-6 sm:p-10">
         <CreateRoleForm />
       </main>
     </>

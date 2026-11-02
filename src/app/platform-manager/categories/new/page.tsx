@@ -11,7 +11,7 @@ export default async function CreateCategoryBoundary() {
   return (
     <>
       <ActorHeader title="New category" name={session.name} nav={MANAGER_NAV} />
-      <main className="p-6">
+      <main className="p-6 sm:p-10">
         <CategoryForm action={createCategoryAction} submitLabel="Create category" clearOnSuccess />
       </main>
     </>

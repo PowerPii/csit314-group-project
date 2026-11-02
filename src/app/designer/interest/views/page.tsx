@@ -12,7 +12,7 @@ export default async function ProjectViewsBoundary() {
   return (
     <>
       <ActorHeader title="Project views" name={session.name} nav={DESIGNER_NAV} />
-      <main className="p-6">
+      <main className="p-6 sm:p-10">
         {rows.length === 0 ? <p>You have no projects yet.</p> : <CountTable rows={rows} label="Views" />}
       </main>
     </>

@@ -27,8 +27,8 @@ export function ActionButton({
       <button type="submit" disabled={pending} className={className}>
         {label}
       </button>
-      {state.error && <span role="alert" className="text-xs text-red-600">{state.error}</span>}
-      {state.message && <span className="text-xs text-green-700">{state.message}</span>}
+      {state.error && <span role="alert" className="text-xs text-danger">{state.error}</span>}
+      {state.message && <span className="text-xs text-success">{state.message}</span>}
     </form>
   );
 }

@@ -22,7 +22,7 @@ export default async function ViewRolesBoundary({ searchParams }: PageProps<"/us
   return (
     <>
       <ActorHeader title="Roles" name={session.name} nav={USER_ADMIN_NAV} />
-      <main className="p-6">
+      <main className="p-6 sm:p-10">
         <SearchBox name="name" value={query} placeholder="Search by role name" clearHref="/user-admin/roles" />
         {roles.length === 0 ? (
           <p>No roles match.</p>
@@ -41,7 +41,7 @@ export default async function ViewRolesBoundary({ searchParams }: PageProps<"/us
                 <tr key={r.id}>
                   <td className={ui.td}>{r.name}</td>
                   <td className={ui.td}>{r.description}</td>
-                  <td className={ui.td}>{r.isSuspended ? "Suspended" : "Active"}</td>
+                  <td className={ui.td}><span className={r.isSuspended ? ui.mutedPill : ui.pill}>{r.isSuspended ? "Suspended" : "Active"}</span></td>
                   <td className={ui.td}>
                     <div className="flex flex-wrap items-start gap-2">
                     <Link href={`/user-admin/roles/${r.id}/edit`} className={ui.smallButton}>Edit</Link>

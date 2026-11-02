@@ -1,7 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { useActionState } from "react";
+import { AuthFrame, ArrowIcon } from "../shell/AuthFrame";
+import { ui } from "../ui";
 import { loginAction, type LoginFormState } from "./actions";
 
 // LoginBoundary: the login page shared by all four actors.
@@ -12,29 +13,40 @@ export default function LoginBoundary() {
   );
 
   return (
-    <main className="mx-auto mt-24 w-full max-w-sm px-4">
-      <h1 className="mb-6 text-2xl font-semibold">Log in</h1>
-      <form action={formAction} className="flex flex-col gap-4">
-        <label className="flex flex-col gap-1">
-          Email
-          <input name="email" type="email" required defaultValue={state.email} className="rounded border px-3 py-2" />
+    <AuthFrame
+      mode="login"
+      title="Welcome back."
+      intro="Sign in to discover remarkable spaces, manage your studio, and follow project interest."
+    >
+      <form action={formAction} className="space-y-5">
+        <label className="block">
+          <span className="mb-2 block">Email address</span>
+          <input
+            name="email"
+            type="email"
+            required
+            autoComplete="email"
+            placeholder="you@studio.com"
+            defaultValue={state.email}
+            className={`${ui.input} h-12 w-full`}
+          />
         </label>
-        <label className="flex flex-col gap-1">
-          Password
-          <input name="password" type="password" required className="rounded border px-3 py-2" />
+        <label className="block">
+          <span className="mb-2 block">Password</span>
+          <input
+            name="password"
+            type="password"
+            required
+            autoComplete="current-password"
+            className={`${ui.input} h-12 w-full`}
+          />
         </label>
-        {state.error && <p role="alert" className="text-red-600">{state.error}</p>}
-        <button
-          type="submit"
-          disabled={pending}
-          className="rounded bg-black px-4 py-2 text-white disabled:opacity-50 dark:bg-white dark:text-black"
-        >
+        {state.error && <p role="alert" className={ui.error}>{state.error}</p>}
+        <button type="submit" disabled={pending} className={`${ui.button} h-12 w-full`}>
           {pending ? "Logging in…" : "Log in"}
+          {!pending && <ArrowIcon />}
         </button>
       </form>
-      <p className="mt-4 text-sm">
-        New customer? <Link href="/register" className="underline">Create an account</Link>
-      </p>
-    </main>
+    </AuthFrame>
   );
 }

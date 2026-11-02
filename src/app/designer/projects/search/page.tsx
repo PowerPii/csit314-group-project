@@ -33,7 +33,7 @@ export default async function SearchMyProjectsBoundary({ searchParams }: PagePro
   return (
     <>
       <ActorHeader title="Search my projects" name={session.name} nav={DESIGNER_NAV} />
-      <main className="p-6">
+      <main className="p-6 sm:p-10">
         <form className="mb-6 flex flex-wrap items-end gap-3">
           <label className="flex flex-col gap-1 text-sm">
             Title

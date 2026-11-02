@@ -20,7 +20,7 @@ export default async function UpdateProjectBoundary({ params }: PageProps<"/desi
   return (
     <>
       <ActorHeader title={`Edit project: ${project.title}`} name={session.name} nav={DESIGNER_NAV} />
-      <main className="p-6">
+      <main className="p-6 sm:p-10">
         <ProjectForm
           action={updateProjectAction.bind(null, id)}
           categories={categories.map((c) => ({ id: c.id, name: c.name }))}

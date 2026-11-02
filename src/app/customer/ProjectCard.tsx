@@ -6,21 +6,21 @@ import { priceRange } from "../format";
 // One project in a grid of results (browse, search, filter, favourites).
 export function ProjectCard({ project, children }: { project: Project; children?: ReactNode }) {
   return (
-    <article className="flex flex-col overflow-hidden rounded border">
+    <article className="group flex flex-col overflow-hidden rounded-2xl border bg-white transition hover:shadow-md">
       <Link href={`/customer/projects/${project.id}`}>
         {project.imageUrls[0] ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={project.imageUrls[0]} alt="" className="h-40 w-full object-cover" />
+          <img src={project.imageUrls[0]} alt="" className="h-48 w-full object-cover transition duration-300 group-hover:scale-[1.02]" />
         ) : (
-          <div className="flex h-40 items-center justify-center bg-gray-100 text-sm text-gray-500 dark:bg-gray-800">No photos yet</div>
+          <div className="flex h-48 items-center justify-center bg-[#ece8df] text-sm text-muted">No photos yet</div>
         )}
       </Link>
-      <div className="flex flex-1 flex-col gap-1 p-3 text-sm">
-        <Link href={`/customer/projects/${project.id}`} className="font-semibold underline">{project.title}</Link>
-        <span>{project.categoryName ?? "Uncategorised"}</span>
-        <span>{priceRange(project.priceMin, project.priceMax)}</span>
-        {project.styleTags.length > 0 && <span className="text-gray-500">{project.styleTags.join(" · ")}</span>}
-        {children && <div className="mt-2">{children}</div>}
+      <div className="flex flex-1 flex-col gap-1 p-4 text-sm">
+        <span className="text-xs font-semibold uppercase tracking-[0.12em] text-eyebrow">{project.categoryName ?? "Uncategorised"}</span>
+        <Link href={`/customer/projects/${project.id}`} className="font-serif text-lg leading-snug tracking-tight hover:text-accent">{project.title}</Link>
+        <span className="font-medium">{priceRange(project.priceMin, project.priceMax)}</span>
+        {project.styleTags.length > 0 && <span className="text-muted">{project.styleTags.join(" · ")}</span>}
+        {children && <div className="mt-auto pt-3">{children}</div>}
       </div>
     </article>
   );

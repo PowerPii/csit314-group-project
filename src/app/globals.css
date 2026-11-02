@@ -1,26 +1,70 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* Hausfolk theme, taken from the team's Figma Make design. */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-canvas: #f4f2ec; /* page background */
+  --color-panel: #f8f7f3; /* top bar, table headers */
+  --color-ink: #202925; /* text, primary buttons */
+  --color-ink-soft: #334039; /* primary button hover */
+  --color-label: #303733; /* form labels */
+  --color-muted: #727b76; /* secondary text */
+  --color-faint: #a0a5a2; /* helper text */
+  --color-line: #deddd6; /* borders */
+  --color-line-soft: #eceae5; /* row dividers */
+  --color-accent: #a85f3b; /* terracotta */
+  --color-accent-dark: #743d25;
+  --color-accent-soft: #fbf4ee;
+  --color-eyebrow: #9a684f;
+  --color-sidebar: #1d2722;
+  --color-danger: #9f3e29;
+  --color-danger-soft: #fff0ec;
+  --color-success: #3d6d4b;
+  --color-success-soft: #e9f1eb;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    border-color: var(--color-line);
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  body {
+    background: var(--color-canvas);
+    color: var(--color-ink);
+  }
+
+  button,
+  a,
+  summary {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: wait;
+  }
+
+  label,
+  legend {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-label);
+  }
+
+  input[type="checkbox"],
+  input[type="radio"] {
+    accent-color: var(--color-accent);
+  }
+
+  input[type="file"]::file-selector-button {
+    margin-right: 0.75rem;
+    border: 0;
+    border-radius: 9999px;
+    background: var(--color-canvas);
+    padding: 0.375rem 0.875rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    cursor: pointer;
+  }
 }

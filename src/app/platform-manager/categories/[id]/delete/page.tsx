@@ -20,7 +20,7 @@ export default async function DeleteCategoryBoundary({ params }: PageProps<"/pla
   return (
     <>
       <ActorHeader title={`Delete category: ${info.category.name}`} name={session.name} nav={MANAGER_NAV} />
-      <main className="p-6">
+      <main className="p-6 sm:p-10">
         <DeleteCategoryForm
           action={deleteCategoryAction.bind(null, id)}
           projectCount={info.projectCount}

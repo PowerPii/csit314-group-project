@@ -12,7 +12,7 @@ export default async function CreateUserAccountBoundary() {
   return (
     <>
       <ActorHeader title="Create account" name={session.name} nav={USER_ADMIN_NAV} />
-      <main className="p-6">
+      <main className="p-6 sm:p-10">
         <CreateUserAccountForm roles={roles.map((r) => ({ id: r.id, name: r.name }))} />
       </main>
     </>
