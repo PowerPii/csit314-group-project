@@ -24,7 +24,15 @@ export type ProjectSearch = {
   completedTo?: Date;
 };
 
-type ProjectRow = {
+// Customer #5: filters on the browse page. Empty fields are ignored.
+export type ProjectFilter = {
+  categoryId?: number | null;
+  style?: string;
+  designerId?: number | null;
+  maxBudget?: number | null;
+};
+
+export type ProjectRow = {
   id: number;
   designer_id: number;
   category_id: number | null;
@@ -106,6 +114,27 @@ export class Project {
       .order(criteria.status === "completed" ? "completed_at" : "created_at", { ascending: false })
       .returns<ProjectRow[]>();
     if (error) throw new Error(`Project.searchByDesigner failed: ${error.message}`);
+    return data.map(Project.fromRow);
+  }
+
+  // Customer #4: every project whose title, description, style tags or category name contains the keyword.
+  static async searchPublic(keyword: string): Promise<Project[]> {
+    const { data, error } = await getDb()
+      .rpc("search_projects", { pattern: `%${escapeLike(keyword)}%` })
+      .select(COLUMNS);
+    if (error) throw new Error(`Project.searchPublic failed: ${error.message}`);
+    return (data as unknown as ProjectRow[]).map(Project.fromRow);
+  }
+
+  // Customer #5: projects matching every filter that is set. With no filters, all projects, newest first.
+  static async filterPublic(filter: ProjectFilter): Promise<Project[]> {
+    let query = getDb().from("project").select(COLUMNS);
+    if (filter.categoryId) query = query.eq("category_id", filter.categoryId);
+    if (filter.style) query = query.contains("style_tags", [filter.style]);
+    if (filter.designerId) query = query.eq("designer_id", filter.designerId);
+    if (filter.maxBudget) query = query.lte("price_min", filter.maxBudget);
+    const { data, error } = await query.order("created_at", { ascending: false }).returns<ProjectRow[]>();
+    if (error) throw new Error(`Project.filterPublic failed: ${error.message}`);
     return data.map(Project.fromRow);
   }
 
