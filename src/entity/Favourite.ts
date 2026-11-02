@@ -1,7 +1,8 @@
 import { escapeLike } from "@/lib/like";
 import { getDb } from "@/lib/supabase";
-import { countPerProject } from "./counts";
+import { countBetween, countPerProject, topRows } from "./counts";
 import { Project, type ProjectRow } from "./Project";
+import type { ProjectCount } from "./reportTypes";
 
 type FavouriteRow = { id: number; customer_id: number; project_id: number; created_at: string };
 
@@ -68,5 +69,16 @@ export class Favourite {
   // Number of customers who saved each project, per project id.
   static async countByProjects(projectIds: number[]): Promise<Map<number, number>> {
     return countPerProject("favourite", projectIds);
+  }
+
+  // Saves made in [from, to).
+  static async countBetween(from: Date, to: Date): Promise<number> {
+    return countBetween("favourite", "created_at", from, to);
+  }
+
+  // The most saved projects in [from, to).
+  static async topProjectsBetween(from: Date, to: Date, limit: number): Promise<ProjectCount[]> {
+    const rows = await topRows<{ project_id: number; title: string; count: number }>("top_saved_projects", from, to, limit);
+    return rows.map((r) => ({ projectId: r.project_id, title: r.title, count: Number(r.count) }));
   }
 }

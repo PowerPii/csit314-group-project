@@ -138,6 +138,45 @@ export class Project {
     return data.map(Project.fromRow);
   }
 
+  static async countByCategory(categoryId: number): Promise<number> {
+    const { count, error } = await getDb()
+      .from("project")
+      .select("id", { count: "exact", head: true })
+      .eq("category_id", categoryId);
+    if (error) throw new Error(`Project.countByCategory failed: ${error.message}`);
+    return count ?? 0;
+  }
+
+  // PM #6: moves every project in one category to another. Returns how many moved.
+  static async reassignCategory(fromCategoryId: number, toCategoryId: number): Promise<number> {
+    const { data, error } = await getDb()
+      .from("project")
+      .update({ category_id: toCategoryId })
+      .eq("category_id", fromCategoryId)
+      .select("id");
+    if (error) throw new Error(`Project.reassignCategory failed: ${error.message}`);
+    return data.length;
+  }
+
+  static async countCreatedBetween(from: Date, to: Date): Promise<number> {
+    const { count, error } = await getDb()
+      .from("project")
+      .select("id", { count: "exact", head: true })
+      .gte("created_at", from.toISOString())
+      .lt("created_at", to.toISOString());
+    if (error) throw new Error(`Project.countCreatedBetween failed: ${error.message}`);
+    return count ?? 0;
+  }
+
+  // PM #8: projects that existed in [from, to) but were not viewed in it.
+  static async findWithNoViewsBetween(from: Date, to: Date): Promise<Project[]> {
+    const { data, error } = await getDb()
+      .rpc("projects_with_no_views", { from_ts: from.toISOString(), to_ts: to.toISOString() })
+      .select(COLUMNS);
+    if (error) throw new Error(`Project.findWithNoViewsBetween failed: ${error.message}`);
+    return (data as unknown as ProjectRow[]).map(Project.fromRow);
+  }
+
   async update(details: ProjectDetails): Promise<void> {
     const { error } = await getDb().from("project").update(Project.toRow(details)).eq("id", this.id);
     if (error) throw new Error(`Project.update failed: ${error.message}`);
