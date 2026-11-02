@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState } from "react";
 import { loginAction, type LoginFormState } from "./actions";
 
@@ -31,6 +32,9 @@ export default function LoginBoundary() {
           {pending ? "Logging in…" : "Log in"}
         </button>
       </form>
+      <p className="mt-4 text-sm">
+        New customer? <Link href="/register" className="underline">Create an account</Link>
+      </p>
     </main>
   );
 }

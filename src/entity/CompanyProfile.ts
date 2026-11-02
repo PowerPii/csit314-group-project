@@ -66,6 +66,17 @@ export class CompanyProfile {
     return data ? CompanyProfile.fromRow(data) : null;
   }
 
+  // Every company profile, by company name (for the designer filter on the browse page).
+  static async findAll(): Promise<CompanyProfile[]> {
+    const { data, error } = await getDb()
+      .from("company_profile")
+      .select()
+      .order("company_name")
+      .returns<CompanyProfileRow[]>();
+    if (error) throw new Error(`CompanyProfile.findAll failed: ${error.message}`);
+    return data.map(CompanyProfile.fromRow);
+  }
+
   // Stores the logo in the public "logos" bucket and returns its URL.
   static async uploadLogo(designerId: number, logo: File): Promise<string> {
     return uploadPublicFile("logos", String(designerId), logo);

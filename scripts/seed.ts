@@ -130,6 +130,11 @@ async function main() {
         style_tags: faker.helpers.arrayElements(styles, { min: 1, max: 3 }),
         price_min: priceMin,
         price_max: priceMin + faker.number.int({ min: 5, max: 50 }) * 1000,
+        // Placeholder photos from picsum.photos, so the customer pages have a gallery to show.
+        image_urls: Array.from(
+          { length: faker.number.int({ min: 1, max: 4 }) },
+          () => `https://picsum.photos/seed/${faker.string.alphanumeric(8)}/800/600`,
+        ),
         completed_at: completed ? faker.date.between({ from: createdAt, to: new Date() }).toISOString() : null,
         created_at: createdAt.toISOString(),
       };

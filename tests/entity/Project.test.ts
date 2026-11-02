@@ -92,3 +92,48 @@ describe("Interior designer entities (local Supabase)", () => {
     expect(await ProjectView.countByProjects([])).toEqual(new Map());
   });
 });
+
+describe("Customer project and favourite entities (local Supabase)", () => {
+  it("searches by keyword across title, style tags and category name", async () => {
+    const project = await Project.create(designer.id, details({ title: `Zebra ${stamp}`, styleTags: [`Tag${stamp}`] }));
+
+    expect((await Project.searchPublic(`zebra ${stamp}`)).map((p) => p.id)).toEqual([project.id]);
+    expect((await Project.searchPublic(`tag${stamp}`)).map((p) => p.id)).toEqual([project.id]);
+    expect((await Project.searchPublic(`category ${stamp}`)).map((p) => p.id)).toContain(project.id);
+    expect((await Project.searchPublic(`category ${stamp}`))[0].categoryName).toBe(category.name);
+    expect(await Project.searchPublic("%_no such thing_%")).toEqual([]);
+  });
+
+  it("filters by category, style, designer and budget", async () => {
+    const cheap = await Project.create(designer.id, details({ title: `Cheap ${stamp}`, priceMin: 5000, styleTags: ["Rustic"] }));
+    const dear = await Project.create(designer.id, details({ title: `Dear ${stamp}`, priceMin: 90000, styleTags: ["Luxury"] }));
+
+    const mine = (await Project.filterPublic({ designerId: designer.id, categoryId: category.id })).map((p) => p.id);
+    expect(mine).toEqual(expect.arrayContaining([cheap.id, dear.id]));
+    expect((await Project.filterPublic({ designerId: designer.id, maxBudget: 6000 })).map((p) => p.id)).toEqual([cheap.id]);
+    expect((await Project.filterPublic({ designerId: designer.id, style: "Luxury" })).map((p) => p.id)).toEqual([dear.id]);
+  });
+
+  it("saves, lists, searches and removes favourites, and records views", async () => {
+    const project = await Project.create(designer.id, details({ title: `Favourite ${stamp}` }));
+    const customerId = designer.id;
+
+    expect(await Favourite.exists(customerId, project.id)).toBe(false);
+    await Favourite.create(customerId, project.id);
+    expect(await Favourite.exists(customerId, project.id)).toBe(true);
+    expect((await Favourite.findProjectsByCustomer(customerId)).map((p) => p.id)).toContain(project.id);
+    expect((await Favourite.searchProjectsByCustomer(customerId, `favourite ${stamp}`, category.id)).map((p) => p.id)).toEqual([project.id]);
+    expect(await Favourite.searchProjectsByCustomer(customerId, `favourite ${stamp}`, category.id + 999)).toEqual([]);
+
+    expect(await Favourite.remove(customerId, project.id)).toBe(true);
+    expect(await Favourite.remove(customerId, project.id)).toBe(false);
+
+    await ProjectView.record(project.id, null);
+    await ProjectView.record(project.id, customerId);
+    expect(await ProjectView.countByProjects([project.id])).toEqual(new Map([[project.id, 2]]));
+  });
+
+  it("lists every company profile", async () => {
+    expect((await CompanyProfile.findAll()).some((p) => p.designerId === designer.id)).toBe(true);
+  });
+});
